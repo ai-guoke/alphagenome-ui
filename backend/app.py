@@ -5,8 +5,8 @@ import numpy as np
 import json
 
 app = Flask(__name__)
-# Be more explicit with CORS for debugging
-CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
+# Update CORS to allow requests from the new frontend port
+CORS(app, resources={r"/predict": {"origins": "http://localhost:6666"}})
 
 # It's better to load the model once when the app starts
 # and get the API key from a secure place, but for this example
@@ -56,4 +56,5 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Make the server accessible within the Docker network
+    app.run(host='0.0.0.0', debug=True)
